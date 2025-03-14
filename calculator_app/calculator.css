@@ -1,0 +1,88 @@
+html, body {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #9db79a
+}
+#label {
+    font-size: 35px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 420px;
+    height: 450px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 3px;
+    background-color: #9ca49c;
+    border-radius: 10px;
+    box-shadow:0px -100px 500px 80px rgba(233, 113, 155, 0.491),
+    0px -130px 800px 30px rgba(190, 115, 23, 0.1),
+    inset 0px -11px 30px rgba(62, 86, 65, 0.6),
+    inset 0px -7px 8px rgba(158, 81, 4, 0.7),
+    inset 0px -1px 1px rgba(216, 171, 171, 0.547),
+    inset 0px 20px 3px rgba(202, 162, 162, 0.2),
+    0px 17px 27px rgba(47, 57, 38, 0.7),
+    0px 4px 3px rgba(0,0,0,0.8),
+    -2px -2px 2px rgba(0,0,0,0.5),
+    inset 1px 1px 1px rgba(255,255,255,0.5),
+    inset 0px 2px 2px rgba(58, 1, 1, 0.594),
+    inset 1px 0px 2px rgba(54, 15, 15, 0.4),
+    inset -1px 0px 2px rgba(59, 1, 15, 0.4);
+}
+.button {
+    width: 80px;
+    height: 40px;
+    background-color: #391a16ce;
+    border: 0px;
+    color: #ffffffca;
+    border-radius: 6px;
+    box-shadow: 3px 5px 5px black;
+}
+
+button:hover {
+    background-color: #80906edf;
+}
+
+button:active {
+    box-shadow: 2px 4px 4px black;
+}
+
+.flexContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items:baseline;
+    width: 390px;
+    row-gap: 10px; 
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.displayContainer {
+    display: flex;
+    justify-content: flex-end;
+    width: 370px;
+    height: 50px;
+    background-color: #414e4166;
+    margin-bottom: 10px;
+    color: rgb(197, 222, 208);
+    font-size: 25px;
+    border-radius: 5px;
+}
+
+  #display {
+    margin-right: 20px;
+    margin-top: 10px;
+} 

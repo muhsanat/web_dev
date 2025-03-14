@@ -1,49 +1,12 @@
 <html>
   <head>
-    <title>Calculator</title>
-    <style>
-      .button {
-        width: 80px;
-        height: 40px;
-        background-color: #6969b3;
-        border: 0px;
-        color: #ffffffca;
-        border-radius: 6px;
-        box-shadow: 3px 5px 5px black;
-      }
-
-      button:hover {
-        background-color: #98c1d9;
-      }
-
-      button:active {
-        box-shadow: 2px 4px 4px black;
-      }
-
-      .flexContainer {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-evenly;
-        align-items: baseline;
-        width: 390px;
-        row-gap: 8px;
-      }
-
-      .displayContainer {
-        display: flex;
-        justify-content: flex-end;
-        width: 390px;
-      }
-
-      #display {
-        margin-right: 20px;
-      }
-    </style>
+    <title>muhsanat's calculator</title>
+    <link rel="stylesheet" href="calculator.css">
   </head>
 
   <body>
-    <h1>Calculator</h1>
+    <h1 id="label">muhsanat's calculator :)</h1>
+    <div class="calculator">
     <div class="displayContainer">
       <span id="display"></span>
     </div>
@@ -71,13 +34,25 @@
 
       <button class="button parenthesis">(</button>
       <button class="button parenthesis">)</button>
-    </div>
 
+      <button class="button clear">clear</button>
+    </div>
+  </div>
     <script>
       const numbersArr = Array.from(document.getElementsByClassName("number"));
       const operatorsArr = Array.from(document.getElementsByClassName("operator"));
       const parenthesisArr = Array.from(document.getElementsByClassName("parenthesis"));
       const numberStrs = "0123456789".split("");
+      const equalsSign = document.getElementsByClassName("equals")[0];
+      const clearButton = document.getElementsByClassName("clear")[0];
+
+      class Node {
+        constructor(val = null, left = null, right = null) {
+          this.val = val;
+          this.left = left;
+          this.right = right; 
+        }
+      }
 
       const data = {
         displayString: "0",
@@ -149,6 +124,82 @@
           data.appendStringParenthesis(elem.innerText);
         });
       });
+
+      
+      function infixToPostfix(expression) {
+        const output = [];
+        const operators = [];
+        const precedence = { '+': 1, '-': 1, '*': 2, '/': 2 };
+
+        const splits = expression.match(/\d+|\+|\-|\*|\/|\(|\)/g); // split into nums and operators
+        for (let c of splits) {
+          if (!isNaN(c)) {
+            output.push(c); // if c is a number, push to output array
+          } else if (c === '(') {
+            operators.push(c); // if its an open paren, put it to operators
+          } else if (c === ')') {
+            while (operators.length && operators[operators.length - 1] != '(') {
+              output.push(operators.pop());
+            }
+            operators.pop(); // remove the open paren 
+          } else {
+            while (operators.length && precedence[c] <= precedence[operators[operators.length - 1]]) {
+              output.push(operators.pop());
+            }
+            operators.push(c);
+          }
+        }
+        while (operators.length) {
+          output.push(operators.pop()); // push the remaining operators to output
+        }
+        return output; // should be the postfix expression
+      }
+
+      function buildExpressionTree(postfix) {
+        const stack = []; // using array as stack basically
+        for (let c of postfix) {
+          if (!isNaN(c)) {   // if c is a number
+            stack.push(new Node(c));  // create a node and push to stack
+          } else { // if c is an operator
+            let right = stack.pop(); // pop two nodes from stack, make them be children of operator
+            let left = stack.pop();
+            stack.push(new Node(c, left, right));  // create a new node/subtree with operator as root
+          }
+        }
+        return stack.pop(); // return the root of the tree
+      }
+
+      function evaluateExpressionTree(root) {
+        if (!root) return 0;
+        if (!root.left && !root.right) { 
+          return parseFloat(root.val);
+        }
+        const leftVal = evaluateExpressionTree(root.left);
+        const rightVal = evaluateExpressionTree(root.right);
+        if (root.val === '+') { return leftVal + rightVal; }
+        if (root.val === '-') { return leftVal - rightVal; }
+        if (root.val === '*') { return leftVal * rightVal; }
+        if (root.val === '/') { return leftVal / rightVal; }
+      }
+
+      equalsSign.addEventListener("click", (e) => {
+        let expression = data.displayString;
+        if (!expression) {
+          return;
+        }
+        const postfix = infixToPostfix(data.displayString);
+        const expressionTree = buildExpressionTree(postfix);
+        const result = evaluateExpressionTree(expressionTree);
+        data.displayString = result.toString();
+        data.updateDisplay();
+        console.log(result); // testing
+      });
+
+      clearButton.addEventListener("click", (e) => {
+        data.displayString = "0";
+        data.updateDisplay();
+      })
+      
     </script>
   </body>
 </html>
